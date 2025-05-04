@@ -1,31 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../Styles/Components.css';
 
 function Ajout() {
+    const [nom,setNom] = useState("")
+    const [salaire,setSalaire] = useState(0)
+
+    const sendData = (e)=>{
+        e.preventDefault()
+
+        if(nom.trim()!==""){
+            fetch("http://localhost:8080/employer/new",{method:"POST",body:{nom,salaire}}).then(response=>{
+               alert(response.body)
+            })
+        }
+    }
     
     return (
         <div className="modal-overlay" >
             <div className="modal-content">
                 <h2 style={{ color: 'blue', textAlign: 'center' }}>Ajout employe</h2>
                 
-                <form>
-                    <label htmlFor="numEmp">
-                        Numero-employe:
-                        <input
-                            name="numEmp"
-                            placeholder="Entrer votre numero"
-                            type="text"
-                            required
-                        />
-                    </label>
-                    
+                <form>       
                     <label htmlFor="nom">
                         Nom:
                         <input
                             name="nom"
                             type="text"
                             placeholder="Entrer votre nom"
+                            value={nom}
+                            onChange={(e)=>setNom(e.target.value)}
                             required
                         />
                     </label>
@@ -34,8 +38,10 @@ function Ajout() {
                         Salaire:
                         <input
                             name="salaire"
-                            type="number"
+                            type='number'
                             required
+                            value={salaire}
+                            onChange={(e)=>setSalaire(e.target.value)}
                             placeholder="Entrer le salaire"
                         />
                     </label>
@@ -45,7 +51,9 @@ function Ajout() {
                          Annuler</Link>
                         <button
                             type="submit"
-                            className=  "btn btn-success mb-3 w-100 mr-10">Enregistrer
+                            className=  "btn btn-success mb-3 w-100 mr-10"
+                            onClick={(e)=>sendData(e)}
+                        >Enregistrer
                         </button>
                     </div>
                     

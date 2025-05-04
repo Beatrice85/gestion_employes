@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import '../Styles/Components.css';
+import Row from './row/Row';
 
 function Accueil() {
     const salaireTotal = 10000;
@@ -13,6 +14,17 @@ function Accueil() {
         { name: 'Min', salaire: salaireMin },
         { name: 'Max', salaire: salaireMax },
     ];
+
+    const [employes,setEmployes] = useState([])
+
+    useEffect(()=>{
+        fetch("http://localhost:8080/employer/all",{method:"GET"}).then(response=>{
+            response.json()
+        }).then(data=>{
+            setEmployes(data)
+            console.log(data)
+        }).catch((e)=>console.error("Erreur be"))
+    },[])
 
     return (
         <div className='appli'>
@@ -33,19 +45,11 @@ function Accueil() {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Stéphanie</td>
-                                    <td>10000</td>
-                                    <td>Moyen</td>
-                                    <td className='actions'>
-                                        <Link to="/modifier" className='btn btn-sm btn-primary mx-2'>
-                                            <i className="fas fa-edit"></i> Modifier
-                                        </Link>
-                                        <button className='btn btn-sm btn-danger'>
-                                            <i className="fas fa-trash"></i> Supprimer
-                                        </button>
-                                    </td>
-                                </tr>
+                                {
+                                    employes.map((emp,index)=>{
+                                        return <Row employer={emp} key={index}/>
+                                    })
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -76,6 +80,10 @@ function Accueil() {
             </div>
         </div>
     );
+}
+
+function getMaxSalaire(data){
+    
 }
 
 export default Accueil;

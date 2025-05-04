@@ -11,10 +11,9 @@ function App() {
   return (
     <BrowserRouter>
     <Routes>
-        <Route path='/' element={<Accueil/>}/>
-        <Route path='/ajout' element={<Ajout/>}/>
-        <Route path='/modifier' element={<Modifier/>}/>
-
+      <Route path='/' element={<Accueil/>}/>
+      <Route path='/ajout' element={<Ajout/>}/>
+      <Route path='/modifier/:id' element={<Modifier/>}/>
     </Routes>
     </BrowserRouter>
   )
