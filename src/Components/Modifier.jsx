@@ -5,13 +5,17 @@ import { useParams } from 'react-router-dom';
 
 function Modifier() {
     const {id} = useParams()
-    const [concerned,setConcerned] = useState()
+    const [concerned,setConcerned] = useState({})
     const [nom,setNom] = useState("")
     const [salaire,setSalaire] = useState()
     useEffect(()=>{
         fetch(`http://localhost:8080/employer/${id}`).then(response=>response.json())
         .then(data=>{
             setConcerned(data)
+            if(data){
+                setNom(data.nom)
+                setSalaire(data.salaire)
+            }
         })
     },[])
 
@@ -23,7 +27,7 @@ function Modifier() {
                alert(response.body)
             })
         }
-        
+
     }
 
     return (
@@ -39,7 +43,7 @@ function Modifier() {
                             type="text"
                             placeholder="Entrer votre nom"
                             required
-                            value={concerned.nom}
+                            value={(nom)?nom : ""}
                             onChange={(e)=>setNom(e.target.value)}
                         />
                     </label>
@@ -51,7 +55,7 @@ function Modifier() {
                             type="number"
                             required
                             placeholder="Entrer le salaire"
-                            value={concerned.salaire}
+                            value={(salaire)?salaire : 0}
                             onChange={(e)=>setSalaire(e.target.value)}
                         />
                     </label>
