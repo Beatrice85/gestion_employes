@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../Styles/Components.css';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Modifier() {
     const {id} = useParams()
     const [concerned,setConcerned] = useState({})
     const [nom,setNom] = useState("")
     const [salaire,setSalaire] = useState()
+    const navigate = useNavigate()
+
     useEffect(()=>{
         fetch(`http://localhost:8080/employer/${id}`).then(response=>response.json())
         .then(data=>{
@@ -23,8 +27,9 @@ function Modifier() {
         e.preventDefault()
 
         if(nom.trim()!==""){
-            fetch(`http://localhost:8080/employer/modif/${id}`,{method:"POST",body:{nom,salaire}}).then(response=>{
-               alert(response.body)
+            axios.post(`http://localhost:8080/employer/modif/${id}`,{nom,salaire}).then(response=>{
+               console.log(response.data)
+               navigate("/")
             })
         }
 

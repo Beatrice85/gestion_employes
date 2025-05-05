@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../Styles/Components.css';
+import axios from 'axios';
 
 function Ajout() {
     const [nom,setNom] = useState("")
     const [salaire,setSalaire] = useState(0)
+    const navigate = useNavigate()
 
     const sendData = (e)=>{
         e.preventDefault()
 
         if(nom.trim()!==""){
-            fetch("http://localhost:8080/employer/new",{method:"POST",body:{nom,salaire}}).then(response=>{
-               alert(response.body)
+            axios.post("http://localhost:8080/employer/new",{nom,salaire}).then(response=>{
+               console.log(response.data)
+               navigate("/")
             })
         }
     }

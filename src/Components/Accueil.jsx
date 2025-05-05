@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import '../Styles/Components.css';
 import Row from './row/Row';
+import axios from "axios"
 
 function Accueil() {
     const salaireTotal = 10000;
@@ -17,13 +18,13 @@ function Accueil() {
 
     const [employes,setEmployes] = useState([])
 
+    const refreshData =(numDelete)=>{
+        let ref = employes.filter(e=>e.numEmp!==numDelete)
+        setEmployes([...ref])
+    }
+
     useEffect(()=>{
-        fetch("http://localhost:8080/employer/all",{method:"GET"}).then(response=>{
-            response.json()
-        }).then(data=>{
-            setEmployes(data)
-            console.log(data)
-        }).catch((e)=>console.error("Erreur be"))
+        axios.get("http://localhost:8080/employer/all").then(response=>setEmployes(response.data))
     },[])
 
     return (
@@ -47,7 +48,7 @@ function Accueil() {
                             <tbody>
                                 {
                                     employes.map((emp,index)=>{
-                                        return <Row employer={emp} key={index}/>
+                                        return <Row employer={emp} key={index} refreshData={refreshData}/>
                                     })
                                 }
                             </tbody>
@@ -68,8 +69,8 @@ function Accueil() {
             <h3 style={{ color: 'blue', textAlign: 'center', marginTop:'40px' }}>Statistique de salaire</h3>
                 <div style={{ width: '60%', height: 500, marginTop: '40px' }}>
                     <ResponsiveContainer>
-                        <BarChart data={data}>
-                            <XAxis dataKey="name" />
+                        <BarChart data={employes}>
+                            <XAxis dataKey="nom" />
                             <YAxis />
                             <Tooltip />
                             <Legend />
