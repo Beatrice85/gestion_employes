@@ -6,17 +6,12 @@ import Row from './row/Row';
 import axios from "axios"
 
 function Accueil() {
-    const salaireTotal = 10000;
-    const salaireMin = 2000;
-    const salaireMax = 9000;
-
-    const data = [
-        { name: 'Total', salaire: salaireTotal },
-        { name: 'Min', salaire: salaireMin },
-        { name: 'Max', salaire: salaireMax },
-    ];
-
+    
     const [employes,setEmployes] = useState([])
+    const salaireTotal = employes.reduce((acc, emp) => acc + emp.salaire, 0);
+const salaireMin = employes.length > 0 ? Math.min(...employes.map(emp => emp.salaire)) : 0;
+const salaireMax = employes.length > 0 ? Math.max(...employes.map(emp => emp.salaire)) : 0;
+
 
     const refreshData =(numDelete)=>{
         let ref = employes.filter(e=>e.numEmp!==numDelete)
